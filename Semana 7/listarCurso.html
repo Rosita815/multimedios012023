@@ -33,19 +33,61 @@
                             <th>Descripcion</th>
                             <th>Tiempo</th>
                             <th>Usuario</th>
+                            <th>Acciones</th>
                         </tr>
                         </thead>
-                        <tbody class="table-group-divider" id="resultados">
+                        <tbody class="table-group-divider" id="resultados">    
+                            <!-- Modal Body -->
+                            <!-- if you want to close by clicking outside the modal, delete the last endpoint:data-bs-backdrop and data-bs-keyboard -->
+                            <div class="modal fade" id="modalId" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" role="dialog" aria-labelledby="modalTitleId" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-lg" role="document">
+                            <div class="modal-content">
+                            <div class="modal-header">
+                            <h5 class="modal-title" id="modalTitleId">Modal title</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <form id="formulario">
+                                    <div class="mb-3">
+                                        <label for="" class="form-label">Nombre</label>
+                                        <input type="text"
+                                            class="form-control" name="nombre" id="Nombre" aria-describedby="helpId" placeholder="Nombre del curso">
+                                        <small id="helpId" class="form-text text-muted">Ingresar el nombre del curso</small>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="" class="form-label">Descripcion</label>
+                                        <input type="text"
+                                            class="form-control" name="descripcion" id="Descripcion" aria-describedby="helpId" placeholder="Descripcion del curso">
+                                        <small id="helpId" class="form-text text-muted">Ingresar la descripcion del curso</small>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="" class="form-label">Tiempo</label>
+                                        <input type="text"
+                                            class="form-control" name="tiempo" id="Tiempo" aria-describedby="helpId" placeholder="Tiempo del curso">
+                                        <small id="helpId" class="form-text text-muted">Ingresar el tiempo del curso</small>
+                                    </div>
+                    
+                                    <div class="mb-3">
+                                        <button type="reset" class="btn btn-danger">Reset</button>
+                                        <button type="submit" class="btn btn-primary">Actualizar</button>
+                                        
+                                    </div>
+                                </form>
+                            </div>
                             
-                           
+                            </div>
+                            </div>
+                            </div>
                         </tbody>
+
                         <tfoot>
-                            
+
                         </tfoot>
                 </table>
             </div>
-            
-
+          
+           
+        
 
         </main>
         <footer>
@@ -87,15 +129,73 @@
                     <td>${valor.descripcion}</td>
                     <td>${valor.tiempo}</td>
                     <td>${valor.usuario}</td>
+                    <td>
+                        <a name="" id="" class="btn btn-danger" onclick="eliminar()" role="button">Borrar</a>
+                        ||
+                        <a name="" id="" data-bs-toggle="modal" data-bs-target="#modalId" class="btn btn-primary" onclick="editar('${valor.id}','${valor.nombre}','${valor.descripcion}','${valor.tiempo}')" role="button">Editar</a>
+                        
+                    </td>
                 </tr>`;
-
+               
         }
+    }
+
+   
+
+    function editar(id,nombre,descripcion,tiempo) {
+        myModalInstance.show();
+       document.getElementById('nombre').value = nombre;
+       document.getElementById('descripcion').value = descripcion;
+       document.getElementById('tiempo').value = tiempo;
+        
+    }
+
+    function eliminar() {
+        alert('eliminar');
     }
 
     cargarDatos();
 
+    //---------------------------------------------------------------
+
+    var formulario = document.getElementById('formulario');
+
+
+    formulario.addEventListener('submit', function(e) {
+        e.preventDefault();
+        alert('Please enter');
+
+        var datoenviar = {
+            nombre:   valor.nombre,
+            descripcion: valor.descripcion,
+            tiempo: valor.tiempo,
+            usuario: 'Rosita'
+        }
+
+        console.log(datoenviar);
+
+        fetch("https://paginas-web-cr.com/ApiPHP/apis/EditarCursos.php",
+        {
+            method: "POST",
+            body: JSON.stringify(datoenviar)
+        })//la url de peticion
+        .then(respuesta => respuesta.json())//recibe los datos en json  
+        .then((datosrespuesta) => {
+            console.log('Datos',datosrespuesta)
+            
+        } )
+        .catch(console.log);
+
+    });
+   
+
+   ////////////////////////////////////////////////////////////////
+
+     const myModal = new bootstrap.Modal(document.getElementById('modalId'), options) 
 
   </script>
+   
+
 </body>
 
 </html>
