@@ -87,10 +87,9 @@
             </div>
           
            
-        
-
         </main>
         <footer>
+           
             <!-- place footer here -->
         </footer>
     </div>
@@ -105,6 +104,37 @@
 
   <script>
     var contenidoTablaResultado = document.querySelector("#resultados");
+
+    var formulario = document.getElementById('formulario');
+
+
+    formulario.addEventListener('submit', function(e) {
+        e.preventDefault();
+        alert('Please enter');
+
+        var datoenviar = {
+            nombre: this.nombre.value,
+            descripcion: this.descripcion.value,
+            tiempo:  this.tiempo.value,
+            usuario: 'Rosita'
+        }
+
+        fetch("https://paginas-web-cr.com/ApiPHP/apis/EditarCursos.php",
+        {
+            method: "POST",
+            body: JSON.stringify(datoenviar)
+        })//la url de peticion
+        .then(respuesta => respuesta.json())//recibe los datos en json  
+        .then((datosrespuesta) => {
+            console.log('Datos',datosrespuesta)
+            
+        } )
+        .catch(console.log);  
+
+    });
+   
+   ////////////////////////////////////////////////////////////////
+
 
     function cargarDatos(){
 
@@ -156,40 +186,12 @@
 
     cargarDatos();
 
+    settable(data);
+    editar(datoenviar);
+
     //---------------------------------------------------------------
 
-    var formulario = document.getElementById('formulario');
-
-
-    formulario.addEventListener('submit', function(e) {
-        e.preventDefault();
-        alert('Please enter');
-
-        var datoenviar = {
-            nombre:   valor.nombre,
-            descripcion: valor.descripcion,
-            tiempo: valor.tiempo,
-            usuario: 'Rosita'
-        }
-
-        console.log(datoenviar);
-
-        fetch("https://paginas-web-cr.com/ApiPHP/apis/EditarCursos.php",
-        {
-            method: "POST",
-            body: JSON.stringify(datoenviar)
-        })//la url de peticion
-        .then(respuesta => respuesta.json())//recibe los datos en json  
-        .then((datosrespuesta) => {
-            console.log('Datos',datosrespuesta)
-            
-        } )
-        .catch(console.log);
-
-    });
    
-
-   ////////////////////////////////////////////////////////////////
 
      const myModal = new bootstrap.Modal(document.getElementById('modalId'), options) 
 
