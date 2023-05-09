@@ -48,6 +48,7 @@
                             </div>
                             <div class="modal-body">
                                 <form id="formulario">
+                                    <input type="hidden" id = "idEditando">   
                                     <div class="mb-3">
                                         <label for="" class="form-label">Nombre</label>
                                         <input type="text"
@@ -66,6 +67,7 @@
                                             class="form-control" name="tiempo" id="Tiempo" aria-describedby="helpId" placeholder="Tiempo del curso">
                                         <small id="helpId" class="form-text text-muted">Ingresar el tiempo del curso</small>
                                     </div>
+                                    
                     
                                     <div class="mb-3">
                                         <button type="reset" class="btn btn-danger">Reset</button>
@@ -105,48 +107,6 @@
   <script>
     var contenidoTablaResultado = document.querySelector("#resultados");
 
-    var formulario = document.getElementById('formulario');
-
-
-    formulario.addEventListener('submit', function(e) {
-        e.preventDefault();
-        alert('Please enter');
-
-        var datoenviar = {
-            nombre: this.nombre.value,
-            descripcion: this.descripcion.value,
-            tiempo:  this.tiempo.value,
-            usuario: 'Rosita'
-        }
-
-        fetch("https://paginas-web-cr.com/ApiPHP/apis/EditarCursos.php",
-        {
-            method: "POST",
-            body: JSON.stringify(datoenviar)
-        })//la url de peticion
-        .then(respuesta => respuesta.json())//recibe los datos en json  
-        .then((datosrespuesta) => {
-            console.log('Datos',datosrespuesta)
-            
-        } )
-        .catch(console.log);  
-
-    });
-   
-   ////////////////////////////////////////////////////////////////
-
-
-    function cargarDatos(){
-
-        fetch("https://paginas-web-cr.com/ApiPHP/apis/ListaCurso.php")//la url de peticion
-        .then(respuesta => respuesta.json())//recibe los datos en json  
-        .then((datosrespuesta) => {
-            //console.log('datosrespuesta',datosrespuesta.data)
-            settable(datosrespuesta.data)
-        } )
-        .catch(console.log);
-    }
-
     function settable(data){
         console.log('data',data);
 
@@ -170,24 +130,70 @@
         }
     }
 
-   
+    function cargarDatos(){
 
-    function editar(id,nombre,descripcion,tiempo) {
-        myModalInstance.show();
-       document.getElementById('nombre').value = nombre;
-       document.getElementById('descripcion').value = descripcion;
-       document.getElementById('tiempo').value = tiempo;
-        
-    }
-
-    function eliminar() {
-        alert('eliminar');
+        fetch("https://paginas-web-cr.com/ApiPHP/apis/ListaCurso.php")//la url de peticion
+        .then(respuesta => respuesta.json())//recibe los datos en json  
+        .then((datosrespuesta) => {
+            //console.log('datosrespuesta',datosrespuesta.data)
+            settable(datosrespuesta.data)
+        } )
+        .catch(console.log);
     }
 
     cargarDatos();
 
-    settable(data);
+    var formulario = document.getElementById('formulario');
+
+    formulario.addEventListener('submit', function(e) {
+        e.preventDefault();
+        alert('Please enter');
+        
+        var datoenviar = {
+            id:  document.querySelector("#idEditando").value,
+            nombre: document.querySelector("#Nombre").value,
+            descripcion: document.querySelector("#Descripcion").value,
+            tiempo:  document.querySelector("#Tiempo").value,
+            usuario: 'Rosi',
+        }
+
+        fetch("https://paginas-web-cr.com/ApiPHP/apis/ActualizarCursos.php",
+        {
+            method: "POST",
+            body: JSON.stringify(datoenviar),
+            mode: 'no-cors',//para evitar que salga un error en la consola
+            headers:{
+                'Content-Type': 'application/json'
+            }
+        })//la url de peticion
+        .then(respuesta => {
+            return respuesta.json()
+        })//recibe los datos en json  
+        .then((datosrespuesta) => {
+            console.log('Datos',datosrespuesta)
+            //settable(datosrespuesta.data)
+        } )
+        .catch(e => {
+            console.error(e)
+        });   
+
+    });
+   
+   ////////////////////////////////////////////////////////////////
+
+    function editar(id,nombre,descripcion,tiempo) {
+        //  myModalInstance.show();
+        document.getElementById('idEditando').value = id;
+        document.getElementById('Nombre').value = nombre;
+        document.getElementById('Descripcion').value = descripcion;
+        document.getElementById('Tiempo').value = tiempo;
+      }
+   
     editar(datoenviar);
+
+    function eliminar() {
+        alert('eliminar');
+    }
 
     //---------------------------------------------------------------
 
