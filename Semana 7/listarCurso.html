@@ -120,7 +120,7 @@
                     <td>${valor.tiempo}</td>
                     <td>${valor.usuario}</td>
                     <td>
-                        <a name="" id="" class="btn btn-danger" onclick="eliminar()" role="button">Borrar</a>
+                        <a name="" id="" class="btn btn-danger" onclick="eliminar('${valor.id}')" role="button">Borrar</a>
                         ||
                         <a name="" id="" data-bs-toggle="modal" data-bs-target="#modalId" class="btn btn-primary" onclick="editar('${valor.id}','${valor.nombre}','${valor.descripcion}','${valor.tiempo}')" role="button">Editar</a>
                         
@@ -191,13 +191,31 @@
    
     editar(datoenviar);
 
-    function eliminar() {
-        alert('eliminar');
-    }
+//-----------------FuncionEliminar-------------------------//
 
+function eliminar(id){
+    alert('eliminar'+id);
+
+var datosenviar = {
+          id:id
+      }
+ fetch("https://paginas-web-cr.com/ApiPHP/apis/BorrarCursos.php",
+      {
+          method:"POST",
+          body:JSON.stringify(datosenviar)
+      })//url de peticion de datos
+      .then(respuesta => respuesta.json())//recibe los datos en formato json
+      .then((datosrepuesta) => {            
+           
+           window.location = 'listarCurso.html'//Muestra el resultado de la peticion
+      })
+      .catch(console.log)//muestra errores
+}
+
+eliminar(datosenviar);
+
+  
     //---------------------------------------------------------------
-
-   
 
      const myModal = new bootstrap.Modal(document.getElementById('modalId'), options) 
 
